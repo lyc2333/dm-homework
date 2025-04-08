@@ -25,7 +25,7 @@ df = pd.DataFrame({
 })
 
 plt.figure(figsize=(8, 6))
-sns.boxplot(x="CKD阶段", y="eGFR", data=df, palette="Set2", showfliers=True)
+sns.boxplot(x="CKD阶段", y="eGFR", data=df, palette="Set2", showfliers=True,legend=False,hue="CKD阶段")
 plt.title("不同CKD阶段的eGFR分布")
 plt.grid(True, linestyle='--', alpha=0.5)
 plt.show()
