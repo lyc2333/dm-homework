@@ -3,18 +3,9 @@ import pyarrow.parquet as pq
 import pathlib
 import json
 import pyarrow
-from typing import TypedDict
 import dask.dataframe as dd
 
 
-class Config(TypedDict):
-    datapath: str
-
-
-def load_config(config_path="./config.json") -> Config:
-    with open(config_path) as config_file:
-        config = json.load(config_file)
-    return config
 
 
 def extract_fields(df):
@@ -44,6 +35,7 @@ def parse_json(row):
 
 
 if __name__ == "__main__":
+    from config import load_config 
     config = load_config()
     datapath = pathlib.Path(config["datapath"])
     parquet_file = pq.ParquetFile(datapath/"part-00001.parquet")
