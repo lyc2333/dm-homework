@@ -12,10 +12,19 @@ def draw_barplot(df:DataFrame,target_column:str,print_counts=False):
     # 统计数量
     counts = df[target_column].value_counts().compute().reset_index()
     counts.columns = [target_column, 'count']
+    counts = counts.sort_values(by='count', ascending=False)
+
     if print_counts:
         print(counts)
     # 使用 seaborn 绘制柱状图
-    sns.barplot(data=counts, x=target_column, y='count')
+    ax = sns.barplot(data=counts, x=target_column, y='count')
+
+    # 在柱上标注具体数值
+    for container in ax.containers:
+        ax.bar_label(container, fmt='%d', label_type='edge', padding=3)
+
+
+    #sns.barplot(data=counts, x=target_column, y='count')
     plt.title(f'{target_column} Distribution')
     plt.xlabel(target_column)
     plt.ylabel('Count')
@@ -39,5 +48,65 @@ def draw_stacked_barplot(df, category_col: str, subcategory_col: str):
     plt.xlabel(category_col)
     plt.ylabel('Count')
     plt.legend(title=subcategory_col)
+    plt.tight_layout()
+    plt.show()
+
+def draw_pieplot(df: DataFrame, target_column: str, print_counts=False):
+    """
+    绘制饼状图：显示 target_column 中各类的占比
+    """
+    # 统计数量
+    counts = df[target_column].value_counts().compute().reset_index()
+    counts.columns = [target_column, 'count']
+
+    if print_counts:
+        print(counts)
+
+    # 绘图
+    plt.figure(figsize=(8, 8))
+    plt.pie(counts['count'], labels=counts[target_column], autopct='%1.1f%%', startangle=140)
+    plt.title(f'{target_column} Distribution (Pie Chart)')
+    plt.axis('equal')  # 保证圆形
+    plt.show()
+
+def draw_boxplot(df: DataFrame, numeric_column: str, category_column: str = None):
+    """
+    绘制箱型图：展示数值列的中位数、分布范围和异常值
+    - numeric_column: 数值列名，如 'price'、'age'
+    - category_column: 类别列名（可选），如 'gender'，用于分组比较
+    """
+    df_pd = df[[numeric_column] + ([category_column] if category_column else [])].compute()
+
+    plt.figure(figsize=(8, 6))
+    if category_column:
+        sns.boxplot(data=df_pd, x=category_column, y=numeric_column)
+        plt.title(f'{numeric_column} Distribution by {category_column} (Box Plot)')
+    else:
+        sns.boxplot(data=df_pd, y=numeric_column)
+        plt.title(f'{numeric_column} Distribution (Box Plot)')
+    
+    plt.xlabel(category_column if category_column else '')
+    plt.ylabel(numeric_column)
+    plt.tight_layout()
+    plt.show()
+
+def draw_violinplot(df: DataFrame, numeric_column: str, category_column: str = None):
+    """
+    绘制小提琴图：展示数值列的分布密度和中位数
+    - numeric_column: 数值列名，如 'price'、'age'
+    - category_column: 类别列名（可选），如 'gender'，用于分组比较
+    """
+    df_pd = df[[numeric_column] + ([category_column] if category_column else [])].compute()
+
+    plt.figure(figsize=(8, 6))
+    if category_column:
+        sns.violinplot(data=df_pd, x=category_column, y=numeric_column, inner='quartile')
+        plt.title(f'{numeric_column} Distribution by {category_column} (Violin Plot)')
+    else:
+        sns.violinplot(data=df_pd, y=numeric_column, inner='quartile')
+        plt.title(f'{numeric_column} Distribution (Violin Plot)')
+
+    plt.xlabel(category_column if category_column else '')
+    plt.ylabel(numeric_column)
     plt.tight_layout()
     plt.show()

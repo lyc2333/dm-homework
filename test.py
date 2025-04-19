@@ -1,31 +1,18 @@
-import seaborn as sns
+# %%
+import pathlib
 import pandas as pd
-import matplotlib.pyplot as plt
+import dask.dataframe as dd
+from config import load_config
+import visualizations
 import numpy as np
-import matplotlib
-matplotlib.rcParams['font.family'] = 'SimHei'  # 黑体
-matplotlib.rcParams['axes.unicode_minus'] = False  # 解决负号 "-" 显示为方块的问题
+import utils
+config = load_config()
 
-# 模拟数据
-np.random.seed(0)
-ckd_stages = ['CKD1期', 'CKD2期', 'CKD3期', 'CKD4期', 'CKD5期']
-data = [
-    np.random.normal(100, 10, 100),
-    np.random.normal(80, 15, 100),
-    np.random.normal(55, 12, 100),
-    np.random.normal(25, 8, 100),
-    np.random.normal(10, 5, 100),
-]
+origin_files = pathlib.Path(r"E:\Torrent\10G_data_new\part-00000.parquet")
+origin_files = pathlib.Path(r"E:\Torrent\30G_data_new")
+processed_files = pathlib.Path("processed_data") / origin_files.name
+processed_time_files = pathlib.Path("processed_data_1") / origin_files.name
 
-
-# 构造 DataFrame
-df = pd.DataFrame({
-    "eGFR": np.concatenate(data),
-    "CKD阶段": np.repeat(ckd_stages, 100)
-})
-
-plt.figure(figsize=(8, 6))
-sns.boxplot(x="CKD阶段", y="eGFR", data=df, palette="Set2", showfliers=True,legend=False,hue="CKD阶段")
-plt.title("不同CKD阶段的eGFR分布")
-plt.grid(True, linestyle='--', alpha=0.5)
-plt.show()
+# %%
+df = dd.read_parquet(origin_files)
+visualizations.draw_violinplot(df,"income")

@@ -122,13 +122,13 @@ if __name__ == "__main__":
 
     num_file = 16
     input_dir = pathlib.Path(config['datapath'])
-    output_dir = pathlib.Path("processed_data") / input_dir.name
+    output_dir = pathlib.Path("processed_data_1") / input_dir.name
     output_dir.mkdir(parents=True, exist_ok=True)
     processes: list[multiprocessing.Process] = []
 
     for i in range(num_file):
         filename = f"part-{i:05d}.parquet"
-        t = multiprocessing.Process(target=parse_purchase_history, args=(input_dir / filename, output_dir / filename, 1024, False, i))
+        t = multiprocessing.Process(target=parse_time, args=(input_dir / filename, output_dir / filename, 1024, i))
         processes.append(t)
         t.start()
     for t in processes:
