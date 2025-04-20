@@ -13,7 +13,7 @@ pip install -r ./requirements.txt
 ## 运行
 
 1. 按照`config-example.json`的格式创建`config.json`文件，指定数据文件目录
-2. 运行`columnParser.py`，可能会花费3-6h的时间处理数据，如果不能一次性完成，可以考虑注释掉其它任务，每次只处理一项
+2. 运行`columnParser.py`，可能会花费3-6h的时间处理数据，如果不能一次性完成，每次只处理下面任务中的一项，注释其它项
     ```py
     parse_purchase_history_main(config['datapath_10G'], "processed_data_1", 8)
     parse_login_history_main(config['datapath_10G'], "processed_data_2", 8)
