@@ -1,3 +1,6 @@
 {
-  "datapath":"path/to/your/data"
+  "datapath":"E:\\Torrent\\1G_data",
+  "datapath_1G":"path/to/your/1g_data",
+  "datapath_10G":"path/to/your/10g_data",
+  "datapath_30G":"path/to/your/30g_data"
 }

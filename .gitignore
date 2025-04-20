@@ -176,7 +176,9 @@ cython_debug/
 config.json
 
 processed_data/*
-processed_data_1/*
-processed_data_2/*
-processed_data_3/*
+processed_data_*/
+# processed_data_1/*
+# processed_data_2/*
+# processed_data_3/*
 split_file/*
+valuable_customers*

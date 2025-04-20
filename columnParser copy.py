@@ -143,6 +143,31 @@ def parse_json_column(input_path: str | pathlib.Path, output_path: str | pathlib
     if writer:
         writer.close()
 
+def parse_address_main(input_path:str,output_path:str="processed_data_3",num_file:int=8):
+    
+    input_dir = pathlib.Path(input_path)
+    output_dir = pathlib.Path("processed_data_3") / input_dir.name
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+
+    args = [
+        (
+            input_dir / f"part-{i:05d}.parquet",  # input_dir / f"part-{i:05d}.parquet",
+            output_dir / f"part-{i:05d}.parquet",
+            pa.schema([
+                pa.field('province', pa.string()),
+
+            ]),
+            "address",
+            parse_address,
+            1024,
+            i,
+        ) for i in range(num_file)
+    ]
+
+    with multiprocessing.Pool() as pool:
+        pool.starmap(parse_json_column, args)
+
 
 if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')  # GPT说可以增加跨平台稳定性，没有测过
